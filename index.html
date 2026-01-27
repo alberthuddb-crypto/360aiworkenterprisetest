@@ -170,7 +170,7 @@
             justify-content: center;
             align-items: center;
             padding: 50px 0;
-            background: #fff; /* 这一块背景是白的/淡渐变 */
+            background: rgb(255, 255, 255); /* 这一块背景是白的/淡渐变 */
             min-height: 600px;
             position: relative;
         }
@@ -187,17 +187,17 @@
             position: relative;
             height: 500px;
             /* 模拟圆形背景渐变 */
-            background: radial-gradient(circle, rgba(230,247,255,1) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgb(234, 243, 252) 0%, rgba(255,255,255,0) 70%);
         }
 
         .center-logo {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
+            width: 270px;
+            height: 270px;
             border-radius: 50%;
-            background: #fff; /* 这里应该放LOGO图片 */
+            background: #fafafa; /* 这里应该放LOGO图片 */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -206,6 +206,14 @@
             z-index: 5;
             text-align: center;
         }
+        .center-logo-img {
+            width: 250px; /* 图片宽度，可按需调整 */
+            height: 250px; /* 图片高度，保持比例不变形 */
+            object-fit: cover; /* 防止图片拉伸变形 */
+            margin-left: 0px; 
+            margin-top: 500px/* 调整左右位置：正数右移/负数左移/0居中，示例：10px/-10px */
+            border-radius: 0px; /* 可选：图片圆角，不需要可删除 */
+}
         .center-logo-text { font-weight: bold; font-size: 18px; color: #333; margin-top: 10px;}
         .center-logo-sub { font-size: 12px; color: #666; }
         
@@ -261,16 +269,20 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            align-items: flex-end; 
+            padding-right: 20px;
         }
         .right-btn {
             background: #5db1ff;
             color: #fff;
-            padding: 10px;
+            padding: 10px 14px;
             text-align: center;
             border-radius: 4px;
             font-size: 14px;
             cursor: pointer;
             transition: 0.3s;
+            min-width: 200px;
+            max-width: 180px;
         }
         .right-btn:hover { background: #2b85e4; }
 
@@ -437,7 +449,7 @@
         </div>
 
         <div class="promo-card card-blue">
-            <span class="card-tag">购买服务「年报」</span>
+            <span class="card-tag">购买服务「年限」</span>
             <div class="card-title">满2年赠1年</div>
             <div class="card-icon">⚡</div>
         </div>
@@ -454,8 +466,8 @@
     </section>
 
     <div class="rules-details">
-        <p><strong>*三礼：</strong>1、积分兑换礼品：根据下单金额折算3倍积分，可进行二次好礼兑换（如下） 2、专业安全管理运维服务：7天付费版企业终端、资产、软件、上网、数据、防勒索等服务体验 3、纳米AI企业版：企业AI转型（大模型、知识库、智能体）提效体验</p>
-        <p><strong>*叠加：</strong>上述1、2、3活动政策，可重复叠加</p>
+        <p><strong>*三礼：</strong>1、积分好礼：根据下单金额折算5倍积分，可进行二次好礼兑换（如下） 2、安全好礼：获赠360专业安全管理运维服务1月付费版企业终端、资产、软件、上网、数据、防勒索等服务体验 3、AI好礼：获赠360纳米AI企业版大模型、知识库、智能体等充值提效体验</p>
+        <p><strong>*注意：</strong>上述1、2、3活动政策，可重复叠加</p>
     </div>
 
     <section class="pricing-section">
@@ -472,9 +484,8 @@
         <div class="features-container">
             <div class="wheel-area">
                 <div class="center-logo">
-                    <div style="font-size:30px; font-weight:bold; background: linear-gradient(to right, #00c6ff, #0072ff); -webkit-background-clip: text; color: transparent;">AI</div>
-                    <div class="center-logo-text">360AI办公</div>
-                    <div class="center-logo-sub">企业版</div>
+                    <img class="center-logo-img" src="images/Center-logo2.png" alt="360AI办公企业版">
+                   
                 </div>
 
                 <div class="feature-item pos-1">
@@ -543,8 +554,13 @@
                 <button class="contact-cta-btn">培训答疑支持</button>
             </div>
         </div>
-        <div style="margin-left: 50px;">
-            <div class="big-blue-text">扫码添加<br>企业AI陪跑专家<br>获取1V1指导</div>
+        <div style="margin-left: 50px;margin-top: -10px;text-align: left;">
+            <div class="big-blue-text" style="font-weight: normal;">
+                <!-- 扫码添加：细体+小号字体 -->
+                <span style="font-weight: 300; font-size: 20px;">扫码添加</span><br>
+                <!-- 加粗文字：大号字体+加粗 -->
+                <strong style="font-size: 30px;">企业AI陪跑专家</strong><br>
+                <strong style="font-size: 30px;">获取1V1指导</strong>
         </div>
     </section>
 
