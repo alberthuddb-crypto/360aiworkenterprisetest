@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>360AI办公企业版</title>
+    <!-- 新增：标签页LOGO（Favicon） -->
+    <link rel="icon" href="images/aiwork-logo-1616" type="image/png" sizes="16x16">
+    <link rel="icon" href="images/aiwork-logo-32x32.png" type="image/png" sizes="32x32">
+    <!-- 上方两行分别适配16x16和32x32尺寸，确保不同设备清晰显示 -->
     <style>
         /* --- 全局重置 --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", Arial, sans-serif; }
@@ -17,40 +21,51 @@
         .logo img { height: 30px; display: block; object-fit: contain; }
         .logo-divider { width: 1px; height: 24px; background: #ccc; margin: 0 10px; flex-shrink: 0; }
         .dev-tool-btn { display: inline-block; background: #5db1ff; color: #fff; padding: 2px 6px; font-size: 12px; border-radius: 2px; text-decoration: none; cursor: pointer; }
-
-        /* --- 第一部分：吐槽文案与主标题 --- */
+        /* --- 第一部分：Hero区域 (弹幕优化版) --- */
         .hero-section {
             text-align: center;
-            padding: 60px 0 40px;
+            padding: 60px 0 40px; 
+            height: 300px; 
             position: relative;
-            height: 300px;
-            overflow: hidden; /* 限制弹幕范围 */
+            overflow: hidden; /* 限制弹幕不溢出 */
+            background: #f5f7fa; /* 保持背景一致 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
-        /* 主标题 */
-        .main-title { z-index: 10; position: relative; }
+        /* 主标题 (层级调高，防止被遮挡) */
+        .main-title { 
+            z-index: 10; 
+            position: relative; 
+            pointer-events: none; /* 让鼠标事件穿透标题区域 */
+        }
         .main-title h1 { font-size: 42px; color: #333; margin-bottom: 10px; font-weight: 800; letter-spacing: 2px; }
         .main-title h2 { font-size: 24px; color: #555; font-weight: 500; }
         .highlight-text { color: #d93025; font-weight: bold; }
-
-        /* 吐槽弹幕动效 */
+        /* --- 新版弹幕样式 (横向滚动) --- */
         .danmaku-item {
             position: absolute;
-            color: #d1d5db; /* 浅灰色 */
+            white-space: nowrap;      /* 禁止换行 */
+            user-select: none;        /* 禁止选中 */
+            cursor: default;
+            will-change: transform;   /* 性能优化 */
+            z-index: 1;               /* 在标题下方 */
+            color: #999;              /* 基础颜色，JS会微调 */
             font-size: 14px;
-            opacity: 0;
-            white-space: nowrap;
-            animation: floatMove 6s infinite ease-in-out;
-            user-select: none;
         }
-
-        @keyframes floatMove {
-            0% { opacity: 0; transform: translateY(10px) translateX(0); }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-20px) translateX(10px); }
+        /* 弹幕动画：从右侧屏幕外 移动到 左侧屏幕外 */
+        @keyframes scrollLeft {
+            0% { 
+                transform: translateX(100vw); /* 从最右侧开始 */
+                opacity: 0; 
+            }
+            5% { opacity: 1; }  /* 快速淡入 */
+            90% { opacity: 1; } /* 保持显示 */
+            100% { 
+                transform: translateX(-100%); /* 移出左侧 */
+                opacity: 0; 
+            }
         }
-
         /* --- 第二部分：活动卡片 --- */
         .promo-section {
             display: flex;
@@ -61,11 +76,10 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-
         /* 侧边规则按钮 */
         .rule-tab {
             position: absolute;
-            left: -30px; /* 调整位置 */
+            left: -30px;
             top: 20px;
             width: 30px;
             background: #0099ff;
@@ -91,23 +105,19 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-
-        /* 卡片动效：悬停上浮+阴影 */
+        /* 卡片动效 */
         .promo-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            filter: brightness(1.05); /* 背景色微加深变亮效果 */
+            filter: brightness(1.05);
         }
-
         .card-blue { background: linear-gradient(135deg, #2b85e4, #0056b3); }
         .card-purple { background: linear-gradient(135deg, #a450ff, #7e00ff); }
         .card-cyan { background: linear-gradient(135deg, #00c6ff, #0072ff); }
-
         .card-tag { font-size: 12px; opacity: 0.8; margin-bottom: 5px; display: block; }
         .card-title { font-size: 28px; font-weight: bold; }
         .card-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 40px; opacity: 0.3; }
-
-        /* 规则详情框 (静态展示在下方，模拟设计稿) */
+        /* 规则详情框 */
         .rules-details {
             max-width: 1000px;
             margin: 20px auto;
@@ -119,9 +129,8 @@
             line-height: 1.8;
             border-radius: 8px;
         }
-
         /* --- 第三部分：价格与购买 --- */
-        .pricing-section { text-align: center; padding: 40px 0; }
+        .pricing-section { text-align: center; padding: 30px 0; }
         
         .price-display {
             font-size: 48px;
@@ -134,14 +143,11 @@
         }
         
         /* 呼吸光效 */
-        .price-num {
-            animation: breathe 3s infinite ease-in-out;
-        }
+        .price-num { animation: breathe 3s infinite ease-in-out; }
         @keyframes breathe {
             0%, 100% { text-shadow: 0 0 5px rgba(0,0,0,0.1); transform: scale(1); }
-            50% { text-shadow: 0 0 20px rgba(43, 133, 228, 0.4); transform: scale(1.02); }
+            50% { text-shadow: 0 0 20px rgba(43, 74, 249, 0.4); transform: scale(1.05); }
         }
-
         .price-unit { font-size: 18px; color: #999; font-weight: normal; }
         
         .buy-btn-large {
@@ -156,40 +162,26 @@
             transition: all 0.1s;
             background: #fff;
         }
-
-        /* 按钮点击反馈 */
-        .buy-btn-large:active {
-            transform: scale(0.95);
-        }
-
+        .buy-btn-large:active { transform: scale(0.95); }
         .price-tip { font-size: 12px; color: red; margin-top: 10px; margin-left: 10px;}
-
         /* --- 第四部分：产品功能圆形布局 --- */
         .features-section {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 50px 0;
-            background: rgb(255, 255, 255); /* 这一块背景是白的/淡渐变 */
-            min-height: 600px;
+            padding: 5px 0;
+            background: rgb(255, 255, 255);
+            min-height: 300px;
             position: relative;
         }
-
-        .features-container {
-            display: flex;
-            width: 1000px;
-            align-items: center;
-        }
-
+        .features-container { display: flex; width: 1000px; align-items: center; }
         /* 左侧圆形区域 */
         .wheel-area {
             flex: 2;
             position: relative;
             height: 500px;
-            /* 模拟圆形背景渐变 */
             background: radial-gradient(circle, rgb(234, 243, 252) 0%, rgba(255,255,255,0) 70%);
         }
-
         .center-logo {
             position: absolute;
             top: 50%; left: 50%;
@@ -197,7 +189,7 @@
             width: 270px;
             height: 270px;
             border-radius: 50%;
-            background: #fafafa; /* 这里应该放LOGO图片 */
+            background: #fafafa;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -207,13 +199,9 @@
             text-align: center;
         }
         .center-logo-img {
-            width: 250px; /* 图片宽度，可按需调整 */
-            height: 250px; /* 图片高度，保持比例不变形 */
-            object-fit: cover; /* 防止图片拉伸变形 */
-            margin-left: 0px; 
-            margin-top: 500px/* 调整左右位置：正数右移/负数左移/0居中，示例：10px/-10px */
-            border-radius: 0px; /* 可选：图片圆角，不需要可删除 */
-}
+            width: 220px; height: 220px; object-fit: cover;
+            margin-left: 0px; margin-top: 0px; border-radius: 0px;
+        }
         .center-logo-text { font-weight: bold; font-size: 18px; color: #333; margin-top: 10px;}
         .center-logo-sub { font-size: 12px; color: #666; }
         
@@ -223,208 +211,146 @@
             text-align: center;
             cursor: pointer;
             width: 140px;
-            transition: all 0.5s ease; /* 0.5s 缩放动画 */
+            transition: all 0.5s ease;
             padding: 10px;
             border-radius: 8px;
         }
-
-        /* 功能悬停效果 */
         .feature-item:hover {
-            transform: scale(1.1) translateY(-5px); /* 放大+上浮 */
+            transform: scale(1.1) translateY(-5px);
             background-color: #f0f9ff;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
         .feat-title { color: #e85a7d; font-weight: bold; font-size: 16px; margin-bottom: 5px; }
         .feat-desc { font-size: 12px; color: #888; line-height: 1.4; }
-
-        /* 手动定位8个功能点 (模拟圆周分布) */
-        /* 上 */
+        /* 定位 */
         .pos-1 { top: 20px; left: 50%; transform: translateX(-50%); } 
-        /* 右上 */
         .pos-2 { top: 100px; right: 50px; }
-        /* 右 */
         .pos-3 { top: 50%; right: 0px; transform: translateY(-50%); }
-        /* 右下 */
         .pos-4 { bottom: 100px; right: 50px; }
-        /* 下 */
         .pos-5 { bottom: 20px; left: 50%; transform: translateX(-50%); }
-        /* 左下 */
         .pos-6 { bottom: 100px; left: 50px; }
-        /* 左 */
         .pos-7 { top: 50%; left: 0px; transform: translateY(-50%); }
-        /* 左上 */
         .pos-8 { top: 100px; left: 50px; }
-
-        /* 颜色定制 */
-        .c-blue { color: #2b85e4; }
-        .c-purple { color: #a450ff; }
-        .c-pink { color: #ff5083; }
-        .c-cyan { color: #00c6ff; }
-        .c-orange { color: #ff9900; }
-
+        .c-blue { color: #2b85e4; } .c-purple { color: #a450ff; }
+        .c-pink { color: #ff5083; } .c-cyan { color: #00c6ff; } .c-orange { color: #ff9900; }
         /* 右侧列表按钮 */
         .feature-list-right {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: flex-end; 
-            padding-right: 20px;
+            flex: 1; display: flex; flex-direction: column; gap: 15px; align-items: flex-end; padding-right: 20px;
         }
         .right-btn {
-            background: #5db1ff;
-            color: #fff;
-            padding: 10px 14px;
-            text-align: center;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.3s;
-            min-width: 200px;
-            max-width: 180px;
+            background: #5db1ff; color: #fff; padding: 10px 14px; text-align: center; border-radius: 4px;
+            font-size: 14px; cursor: pointer; transition: 0.3s; min-width: 200px; max-width: 180px;
         }
         .right-btn:hover { background: #2b85e4; }
-
         /* --- 第五部分：二维码与咨询 --- */
         .contact-section {
-            padding: 40px 0;
-            background: #fff;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
+            padding: 40px 0; background: #fff; text-align: center;
+            display: flex; justify-content: center; align-items: center; gap: 40px;
         }
         .qr-box {
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 8px;
-            transition: transform 0.3s;
-            cursor: pointer;
+            border: 1px solid #ddd; padding: 10px; border-radius: 8px; transition: transform 0.3s; cursor: pointer;
         }
-        .qr-box:hover {
-            transform: scale(1.1); /* 二维码悬停放大 */
-        }
+        .qr-box:hover { transform: scale(1.1); }
         .qr-img { width: 120px; height: 120px; object-fit: contain; display: block; }
-
         .contact-text-box { text-align: left; }
         .contact-cta-btn {
-            background: #fff; border: 1px solid #ccc; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin: 5px 0; display: block; width: fit-content; cursor: pointer;
+            background: #fff; border: 1px solid #ccc; padding: 5px 15px; border-radius: 20px;
+            font-size: 12px; margin: 5px 0; display: block; width: fit-content; cursor: pointer;
         }
-
         .big-blue-text { font-size: 24px; color: #2b85e4; font-weight: bold; line-height: 1.4; }
-
         /* --- 第六部分：积分礼品 (横向滚动) --- */
-        .gift-section {
-            background: #f9f9f9;
-            padding: 40px 0;
-            text-align: center;
-        }
+        .gift-section { background: #f9f9f9; padding: 40px 0; text-align: center; }
         .gift-header {
-            background: #ffcc00;
-            color: #fff;
-            display: inline-block;
-            padding: 5px 15px;
-            font-weight: bold;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            background: #ffcc00; color: #fff; display: inline-block; padding: 5px 15px;
+            font-weight: bold; border-radius: 4px; margin-bottom: 10px;
         }
         .gift-sub { font-size: 20px; font-weight: bold; color: #333; display: inline-block; margin-left: 10px; }
         .gift-desc { color: #666; font-size: 14px; margin-bottom: 30px; }
-
-        .carousel-container {
-            position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-        }
-        .arrow-btn {
-            font-size: 30px; color: #ddd; cursor: pointer; user-select: none; padding: 0 10px;
-        }
+        .carousel-container { position: relative; max-width: 1000px; margin: 0 auto; display: flex; align-items: center; }
+        .arrow-btn { font-size: 30px; color: #ddd; cursor: pointer; user-select: none; padding: 0 10px; }
         .arrow-btn:hover { color: #999; }
-
         .gift-track-wrapper {
-            overflow-x: auto;
-            white-space: nowrap;
-            width: 100%;
-            scrollbar-width: none; /* Firefox hide scrollbar */
-            scroll-behavior: smooth;
-            padding: 10px 0;
+            overflow-x: auto; white-space: nowrap; width: 100%; scrollbar-width: none;
+            scroll-behavior: smooth; padding: 10px 0;
         }
         .gift-track-wrapper::-webkit-scrollbar { display: none; }
-
         .gift-card {
-            display: inline-block;
-            width: 180px;
-            background: #fff;
-            margin: 0 10px;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            vertical-align: top;
-            cursor: pointer;
-            transition: 0.2s;
+            display: inline-block; width: 180px; background: #fff; margin: 0 10px; padding: 15px;
+            border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            vertical-align: top; cursor: pointer; transition: 0.2s;
         }
         .gift-card:hover { transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
-        
         .gift-img { width: 100%; height: 100px; background: #eee; margin-bottom: 10px; object-fit: contain; }
         .gift-name { font-size: 12px; color: #333; margin-bottom: 5px; white-space: normal; height: 32px; overflow: hidden; }
         .gift-points { font-size: 14px; font-weight: bold; color: #333; }
         .exchange-tag { background: #ffeeba; color: #d48806; font-size: 10px; padding: 2px 5px; border-radius: 2px; margin-left: 5px; }
-
         /* --- 悬浮侧边栏 --- */
         .floating-sidebar {
-            position: fixed;
-            right: 0;
-            top: 60%;
-            transform: translateY(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            position: fixed; right: 0; top: 60%; transform: translateY(-50%); z-index: 100;
+            display: flex; flex-direction: column; gap: 10px;
         }
         .float-btn {
-            width: 100px;
-            padding: 10px 0;
-            text-align: center;
-            color: #fff;
-            font-size: 14px;
-            cursor: pointer;
-            border-top-left-radius: 20px;
-            border-bottom-left-radius: 20px;
-            box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
+            width: 100px; padding: 10px 0; text-align: center; color: #fff; font-size: 14px; cursor: pointer;
+            border-top-left-radius: 20px; border-bottom-left-radius: 20px; box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
         }
-        .btn-buy { background: #e6cb59; color: #fff; } /* 金色 */
-        .btn-consult { background: #00c853; } /* 绿色 */
-
-        /* --- 模态窗 --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
+        .btn-buy { background: #e6cb59; color: #fff; }
+        .btn-consult { background: #00c853; }
+        /* --- 【修改】Windows风格规则弹窗 --- */
+        /* 弹窗遮罩层 */
+        .rule-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.3); /* 遮罩透明度可调整 */
+            display: none; justify-content: center; align-items: center; 
+            z-index: 999; /* 确保在最上层 */
+        }
+        /* 弹窗主体 (Windows风格：蓝色边框+顶部导航栏) */
+        .rule-modal-box {
+            border: 2px solid #0078d7; /* 弹窗边框颜色，可调整 */
+            border-radius: 4px; /* 轻微圆角，贴近Windows风格 */
+            background: #fff; /* 弹窗背景色 */
+            min-width: 400px; max-width: 600px; /* 宽度范围，自适应文字 */
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            overflow: hidden; /* 确保导航栏和内容区无缝衔接 */
+        }
+        /* 弹窗顶部导航栏 */
+        .rule-modal-header {
+            background: #0078d7; /* 导航栏背景色，与边框呼应 */
+            color: #fff; /* 导航栏文字色 */
+            padding: 8px 16px; /* 导航栏内边距，可调整 */
+            font-size: 14px; /* 导航栏文字大小 */
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            z-index: 999;
         }
-        .modal-content {
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 500px;
-            text-align: center;
+        /* 弹窗关闭按钮 */
+        .rule-modal-close {
+            width: 24px; height: 24px; /* 关闭按钮大小 */
+            text-align: center; line-height: 24px;
+            cursor: pointer; border-radius: 2px;
+            background: #f5f5f5; color: #333; /* 关闭按钮样式 */
+            font-size: 16px;
+            transition: background 0.2s;
         }
-        .close-modal { margin-top: 20px; padding: 8px 20px; cursor: pointer; background: #eee; border: none; border-radius: 4px; }
-
-        /* 图片占位符样式 (模拟真实图片) */
-        .img-placeholder { display: flex; align-items: center; justify-content: center; background: #f0f0f0; color: #aaa; font-size: 12px; }
-
+        .rule-modal-close:hover {
+            background: #e0e0e0; /* 关闭按钮hover效果 */
+        }
+        /* 弹窗内容区 (可调整背景色和透明度) */
+        .rule-modal-content {
+            padding: 20px 16px; /* 内容区内边距 */
+            background: #fff; /* 内容区背景色，可调整 */
+            opacity: 1; /* 内容区透明度，0-1之间调整 */
+        }
+        /* 弹窗文字样式 (可调整字号、粗细、颜色) */
+        .rule-modal-text {
+            font-size: 12px; /* 文字大小，可调整 */
+            color: #333; /* 文字颜色，可调整 */
+            line-height: 1.5; /* 行高，提升阅读体验 */
+            font-weight: 400; /* 文字粗细，400=常规，700=粗体 */
+            margin-bottom: 5px; /* 每条规则间距 */
+        }
     </style>
 </head>
 <body>
-
     <div class="top-bar">
         <div class="logo">
             <img src="images/aiwork-logo.png" alt="360AI办公">
@@ -433,21 +359,18 @@
         </div>
         <a href="https://saas.360.cn/help/0?src=sem_bannermfsy1" class="dev-tool-btn" target="_blank" rel="noopener">发票开具</a>
     </div>
-
-    <section class="hero-section" id="hero">
-        <div id="danmaku-container"></div>
-
+    <section class="hero-section" id="hero-section">
+        <div id="danmaku-container" style="position: absolute; width: 100%; height: 100%; left: 0; top: 0;"></div>
         <div class="main-title">
             <h1>三重礼遇齐上线 AI囤货超划算!</h1>
             <h2>日均6毛超实惠 200+AI全到位</h2>
         </div>
     </section>
-
     <section class="promo-section">
-        <div class="rule-tab" onclick="showRules()">
+        <!-- 查看规则按钮 (点击触发Windows风格弹窗) -->
+        <div class="rule-tab" onclick="showRuleModal()">
             查看规则
         </div>
-
         <div class="promo-card card-blue">
             <span class="card-tag">购买服务「年限」</span>
             <div class="card-title">满2年赠1年</div>
@@ -464,12 +387,10 @@
             <div class="card-icon">🎁</div>
         </div>
     </section>
-
     <div class="rules-details">
         <p><strong>*三礼：</strong>1、积分好礼：根据下单金额折算5倍积分，可进行二次好礼兑换（如下） 2、安全好礼：获赠360专业安全管理运维服务1月付费版企业终端、资产、软件、上网、数据、防勒索等服务体验 3、AI好礼：获赠360纳米AI企业版大模型、知识库、智能体等充值提效体验</p>
         <p><strong>*注意：</strong>上述1、2、3活动政策，可重复叠加</p>
     </div>
-
     <section class="pricing-section">
         <div class="price-display">
             <span class="price-num">¥200</span>
@@ -479,15 +400,12 @@
         <button class="buy-btn-large" onclick="window.location.href='https://admin.saas.360.cn/s'">立即购买</button>
         <div class="price-tip">*不限企业规模（1人起），皆可购买使用</div>
     </section>
-
     <section class="features-section">
         <div class="features-container">
             <div class="wheel-area">
                 <div class="center-logo">
                     <img class="center-logo-img" src="images/Center-logo2.png" alt="360AI办公企业版">
-                   
                 </div>
-
                 <div class="feature-item pos-1">
                     <div class="feat-title c-blue">AI写作</div>
                     <div class="feat-desc">总结/公文/教案/标书/新媒体营销文案</div>
@@ -497,38 +415,31 @@
                     <div class="feat-title c-pink">AI图片</div>
                     <div class="feat-desc">图片生成/修复/美化/编辑/修改/转换/识别/在线海报设计</div>
                 </div>
-
                 <div class="feature-item pos-3">
                     <div class="feat-title c-purple">AI音/视频</div>
                     <div class="feat-desc">视频生成/提取/分析/编辑/转换/压缩/截图/问答</div>
                 </div>
-
                 <div class="feature-item pos-4">
                     <div class="feat-title c-cyan">模板大全</div>
                     <div class="feat-desc">优质PPT/Word/Excel/行业、岗位级模板</div>
                 </div>
-
                 <div class="feature-item pos-5">
                     <div class="feat-title c-orange">办公工具</div>
                     <div class="feat-desc">C盘扩容/数据恢复/高清录屏等办公工具大全</div>
                 </div>
-
                 <div class="feature-item pos-6">
                     <div class="feat-title c-blue">PDF工具</div>
                     <div class="feat-desc">PDF编辑/修改/转换/压缩/提取/水印</div>
                 </div>
-
                  <div class="feature-item pos-7">
                     <div class="feat-title c-pink">AI PPT</div>
                     <div class="feat-desc">根据主题/网页/文档/音/视频一句话生成PPT</div>
                 </div>
-
                 <div class="feature-item pos-8">
                     <div class="feat-title c-blue">AI文档</div>
                     <div class="feat-desc">分析/总结/提取/插图/大纲/邮件/问答/翻译</div>
                 </div>
             </div>
-
             <div class="feature-list-right">
                 <div class="right-btn">批量采集特惠</div>
                 <div class="right-btn">企业统一管理</div>
@@ -539,7 +450,6 @@
             </div>
         </div>
     </section>
-
     <section class="contact-section" id="qr-section">
         <div class="qr-box">
             <img src="images/sale.png" alt="活动" class="qr-img">
@@ -556,21 +466,18 @@
         </div>
         <div style="margin-left: 50px;margin-top: -10px;text-align: left;">
             <div class="big-blue-text" style="font-weight: normal;">
-                <!-- 扫码添加：细体+小号字体 -->
                 <span style="font-weight: 300; font-size: 20px;">扫码添加</span><br>
-                <!-- 加粗文字：大号字体+加粗 -->
                 <strong style="font-size: 30px;">企业AI陪跑专家</strong><br>
                 <strong style="font-size: 30px;">获取1V1指导</strong>
+            </div>
         </div>
     </section>
-
     <section class="gift-section">
         <div>
             <span class="gift-header">积分兑换礼品</span>
             <span class="gift-sub">好礼额外加码</span>
         </div>
         <p class="gift-desc">*下单即享积分倍增，兑换礼品，年底囤货多赚一笔！</p>
-
         <div class="carousel-container">
             <div class="arrow-btn" onclick="scrollGifts(-1)">❮</div>
             <div class="gift-track-wrapper" id="giftTrack">
@@ -613,7 +520,6 @@
             <div class="arrow-btn" onclick="scrollGifts(1)">❯</div>
         </div>
     </section>
-
     <div class="floating-sidebar">
         <div class="float-btn btn-buy" onclick="window.location.href='https://admin.saas.360.cn/s'">
             <div>🛒</div>
@@ -625,72 +531,139 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="ruleModal">
-        <div class="modal-content">
-            <h3>活动规则</h3>
-            <p>跳转至完整规则页面...</p>
-            <p>（点击下方按钮模拟跳转）</p>
-            <button class="buy-btn-large" style="padding: 5px 20px; font-size:14px; margin-top:10px;" onclick="window.open('https://saas.360.cn/support?src=sem_bannermfsy1')">前往查看</button>
-            <br>
-            <button class="close-modal" onclick="closeRules()">关闭</button>
+    <!-- 【新增】Windows风格规则弹窗 -->
+    <div class="rule-modal-overlay" id="ruleModal">
+        <div class="rule-modal-box">
+            <!-- 弹窗顶部导航栏 -->
+            <div class="rule-modal-header">
+                <span>活动规则</span>
+                <div class="rule-modal-close" onclick="closeRuleModal()">×</div>
+            </div>
+            <!-- 弹窗内容区 (规则文字) -->
+            <div class="rule-modal-content">
+                <p class="rule-modal-text"><strong>活动日期：</strong>即日起至活动下线（以360官方展示为主）。</p>
+                <p class="rule-modal-text"><strong>1、年限-满2赠1：</strong>活动日期内，购买任意数量以上的360AI办公企业版账号>=2年期限，所有账号均可免费增加额外一年会员服务。且赠期不可循环叠加。
+                    如，买2年增加1年，为3年服务，买3年增加1年为4年服务。</p>
+                <p class="rule-modal-text"><strong>2、数量-满5打8：</strong>活动日期内，购买360AI办公企业版账号数量>=5个，可享受8折低价。</p>
+                <p class="rule-modal-text"><strong>3、金额-满5赠3：</strong>单次购买总金额大于5000元（折前），可享受3重好礼（如下）。</p>
+                <p class="rule-modal-text">1️⃣积分好礼：根据下单金额折算5倍积分，可兑换各类礼品：下单即享3倍积分回馈！积分按实际支付金额折算，凭积分可前往积分商城挑选二次好礼。涵盖家电、数码、办公、生活等13+品类，随心换随心兑！</p>
+                <p class="rule-modal-text">2️⃣安全好礼：360专业安全管理运维服务1月付费版服务指导咨询：基于360领先数字安全大脑，依托全面SaaS架构，为企业提供终端安全、资产管理、软件管理、上网行为管理、数据防泄漏、勒索防护等服务。</p>
+                <p class="rule-modal-text">3️⃣AI好礼：360纳米AI企业版充值提效体验：提供国内外优选大模型，帮企业实现知识库内容采集、创建、管理，为用户开放各岗位办公预制智能体以及智能体自编排能力。可实现企业AI量化监测、安全管控等。</p>
+                <p class="rule-modal-text"><strong>4、活动政策叠加：</strong>上述1、2、3活动政策，满足条件时，可重复叠加</p>
+                <p class="rule-modal-text">*以上活动解释权归360所有</p>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- 1. 弹幕生成逻辑 ---
-        const complaints = [
-            "写PPT不会排版?", "视频看完怎总结?", "录音太长怎总结?", 
-            "文章缺少配图?", "图片二次处理难?", "总结不会写?", 
-            "不会剪辑视频?", "文档太长难总结?", "文档格式收钱?",
-            "没有模板从零搭?", "音/视频会议总结麻烦?"
-        ];
-        
+        // ============================
+        // 1. 优化版弹幕生成逻辑 (横向+避让中间)
+        // ============================
+        const danmakuConfig = {
+            texts: [
+                "写PPT不会排版?", "PDF格式转换难?", "不会制作海报?", "文章缺少配图?",
+                "总结不会写?", "视频看完总结难?", "录音太长总结难?", "图片二次处理难?",
+                "音/视频会议总结麻烦?", "没有模板从零搞?", "文档格式收钱?", "不会剪辑视频?",
+                "文档太长难总结?", "数据分析头大?", "周报月报怎么编?", "创意枯竭怎么办?"
+            ],
+            minSize: 13,      // 最小字体
+            maxSize: 16,      // 最大字体
+            minDuration: 15,  // 最快速度(秒)
+            maxDuration: 25,  // 最慢速度(秒)
+            safeZoneHeight: 30, // 中间“禁飞区”占比(%)，适配标题高度
+        };
+        const heroSection = document.getElementById('hero-section');
         const danmakuContainer = document.getElementById('danmaku-container');
+        // 工具：生成区间随机数
+        function random(min, max) { return Math.random() * (max - min) + min; }
+        // 核心算法：计算不遮挡中间区域的Top值
+        function getSafeTopPosition(containerHeight) {
+            const isTopPart = Math.random() > 0.5;
+            const buffer = 20; // 边距缓冲
+            if (isTopPart) {
+                return random(10, containerHeight * 0.3 - buffer);
+            } else {
+                return random(containerHeight * 0.7 + buffer, containerHeight - 30);
+            }
+        }
+        function createDanmakuItem(text) {
+            const el = document.createElement('div');
+            el.classList.add('danmaku-item');
+            el.innerText = text;
+            // 1. 随机样式
+            const size = random(danmakuConfig.minSize, danmakuConfig.maxSize);
+            const opacity = random(0.3, 0.7); // 随机透明度
+            el.style.fontSize = `${size}px`;
+            el.style.opacity = opacity;
+            // 2. 智能定位 (避开中间)
+            const containerHeight = heroSection.clientHeight; // 获取容器实际高度(300px)
+            const topPos = getSafeTopPosition(containerHeight);
+            el.style.top = `${topPos}px`;
+            // 3. 动画设定 (横向滚动)
+            const duration = random(danmakuConfig.minDuration, danmakuConfig.maxDuration);
+            const delay = random(-20, 0); // 随机负延迟，避免弹幕扎堆
+            el.style.animationName = 'scrollLeft';
+            el.style.animationDuration = `${duration}s`;
+            el.style.animationTimingFunction = 'linear';
+            el.style.animationIterationCount = 'infinite'; 
+            el.style.animationDelay = `${delay}s`;
+            return el;
+        }
+        function initDanmaku() {
+            danmakuContainer.innerHTML = ''; // 清空原有
+            const count = 12; 
+            for (let i = 0; i < count; i++) {
+                const textIndex = Math.floor(random(0, danmakuConfig.texts.length));
+                const text = danmakuConfig.texts[textIndex];
+                const item = createDanmakuItem(text);
+                danmakuContainer.appendChild(item);
+            }
+        }
+        // 启动弹幕
+        initDanmaku();
         
-        // 随机生成位置和延迟
-        complaints.forEach((text, index) => {
-            const span = document.createElement('span');
-            span.innerText = text;
-            span.className = 'danmaku-item';
-            
-            // 随机分布在左右两侧，避开中心
-            const isLeft = Math.random() > 0.5;
-            const leftPos = isLeft ? Math.random() * 30 + '%' : Math.random() * 30 + 60 + '%';
-            const topPos = Math.random() * 80 + 10 + '%';
-            
-            span.style.left = leftPos;
-            span.style.top = topPos;
-            
-            // 随机动画延迟
-            span.style.animationDelay = (Math.random() * 5) + 's';
-            span.style.animationDuration = (4 + Math.random() * 4) + 's'; // 4-8秒浮动
-            
-            danmakuContainer.appendChild(span);
+        // 窗口大小变化时微调（可选）
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(initDanmaku, 500);
         });
 
-        // --- 2. 规则弹窗逻辑 ---
-        function showRules() {
-            document.getElementById('ruleModal').style.display = 'flex';
+        // ============================
+        // 2. 【新增】Windows风格规则弹窗逻辑
+        // ============================
+        const ruleModalOverlay = document.getElementById('ruleModal');
+        // 打开弹窗
+        function showRuleModal() {
+            ruleModalOverlay.style.display = 'flex';
         }
-        function closeRules() {
-            document.getElementById('ruleModal').style.display = 'none';
+        // 关闭弹窗
+        function closeRuleModal() {
+            ruleModalOverlay.style.display = 'none';
         }
+        // 点击弹窗遮罩空白处关闭弹窗
+        ruleModalOverlay.addEventListener('click', (e) => {
+            if (e.target === ruleModalOverlay) {
+                closeRuleModal();
+            }
+        });
 
-        // --- 3. 滚动到二维码逻辑 ---
+        // ============================
+        // 3. 原有其他逻辑保持不变
+        // ============================
+        // 滚动到二维码区域
         function scrollToQr() {
             document.getElementById('qr-section').scrollIntoView({ behavior: 'smooth' });
         }
-
-        // --- 4. 礼品轮播逻辑 ---
+        // 礼品轮播滚动
         function scrollGifts(direction) {
             const track = document.getElementById('giftTrack');
             const scrollAmount = 220; // 卡片宽度 + 间距
             track.scrollLeft += direction * scrollAmount;
         }
-
-        // --- 5. 礼品跳转 ---
+        // 跳转礼品商城
         function goToMall() {
-            window.location.href = 'https://qiyeanquanyun.fuli.6360.cn/';
+            window.location.href = 'https://admin.saas.360.cn/login';
         }
     </script>
 </body>
