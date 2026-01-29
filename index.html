@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>360AI办公企业版</title>
     <!-- 新增：标签页LOGO（Favicon） -->
-    <link rel="icon" href="images/aiwork-logo-1616" type="image/png" sizes="16x16">
-    <link rel="icon" href="images/aiwork-logo-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="images/aiwork-logo-1616.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="images/aiwork-logo-3232.png" type="image/png" sizes="32x32">
+    <link rel="shortcut icon" href="images/aiwork-logo-3232.png" type="image/x-icon"> <!-- 兼容旧浏览器 -->
     <!-- 上方两行分别适配16x16和32x32尺寸，确保不同设备清晰显示 -->
     <style>
         /* --- 全局重置 --- */
@@ -25,7 +26,7 @@
         .hero-section {
             text-align: center;
             padding: 60px 0 40px; 
-            height: 300px; 
+            height: 270px; 
             position: relative;
             overflow: hidden; /* 限制弹幕不溢出 */
             background: #f5f7fa; /* 保持背景一致 */
@@ -116,7 +117,22 @@
         .card-cyan { background: linear-gradient(135deg, #00c6ff, #0072ff); }
         .card-tag { font-size: 12px; opacity: 0.8; margin-bottom: 5px; display: block; }
         .card-title { font-size: 28px; font-weight: bold; }
-        .card-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 40px; opacity: 0.3; }
+         /* 调整卡片图标容器样式，保证图片不变形、位置不变 */
+         .card-icon { 
+            position: absolute; 
+            right: 20px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 70px; /* 固定宽度，和原图标大小一致 */
+            height: 70px; /* 固定高度，和原图标大小一致 */
+            opacity: 0.3;
+        }
+        /* 卡片内图标图片样式 */
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 保证图片不变形 */
+        }
         /* 规则详情框 */
         .rules-details {
             max-width: 1000px;
@@ -255,7 +271,7 @@
         .contact-text-box { text-align: left; }
         .contact-cta-btn {
             background: #fff; border: 1px solid #ccc; padding: 5px 15px; border-radius: 20px;
-            font-size: 12px; margin: 5px 0; display: block; width: fit-content; cursor: pointer;
+            font-size: 12px; margin: 5px 0; display: block; width: 105px; cursor: pointer;
         }
         .big-blue-text { font-size: 24px; color: #2b85e4; font-weight: bold; line-height: 1.4; }
         /* --- 第六部分：积分礼品 (横向滚动) --- */
@@ -290,11 +306,36 @@
             display: flex; flex-direction: column; gap: 10px;
         }
         .float-btn {
-            width: 100px; padding: 10px 0; text-align: center; color: #fff; font-size: 14px; cursor: pointer;
+           /* 移除固定宽度，改为自适应 */            
+            padding: 10px 15px;
+            text-align: center; color: #fff; font-size: 14px; cursor: pointer;
             border-top-left-radius: 20px; border-bottom-left-radius: 20px; box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
+            display: flex; /* 弹性布局，让图标和文字并列 */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            gap: 5px; /* 图标和文字间距 */
+            white-space: nowrap; /* 禁止文字换行 */
+           /* 确保按钮最小宽度，避免过窄 */
+            min-width: 120px;
         }
         .btn-buy { background: #e6cb59; color: #fff; }
         .btn-consult { background: #00c853; }
+        /* 悬浮按钮内图标样式 */
+        .float-btn-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 1;
+            /* 保证图片不变形 */
+        }
+        /* 悬浮按钮内图标图片样式 */
+        .float-btn-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
         /* --- 【修改】Windows风格规则弹窗 --- */
         /* 弹窗遮罩层 */
         .rule-modal-overlay {
@@ -305,7 +346,7 @@
         }
         /* 弹窗主体 (Windows风格：蓝色边框+顶部导航栏) */
         .rule-modal-box {
-            border: 2px solid #0078d7; /* 弹窗边框颜色，可调整 */
+            border: 2px solid #80bdef; /* 弹窗边框颜色，可调整 */
             border-radius: 4px; /* 轻微圆角，贴近Windows风格 */
             background: #fff; /* 弹窗背景色 */
             min-width: 400px; max-width: 600px; /* 宽度范围，自适应文字 */
@@ -314,7 +355,7 @@
         }
         /* 弹窗顶部导航栏 */
         .rule-modal-header {
-            background: #0078d7; /* 导航栏背景色，与边框呼应 */
+            background: #80bdef; /* 导航栏背景色，与边框呼应 */
             color: #fff; /* 导航栏文字色 */
             padding: 8px 16px; /* 导航栏内边距，可调整 */
             font-size: 14px; /* 导航栏文字大小 */
@@ -343,7 +384,7 @@
         /* 弹窗文字样式 (可调整字号、粗细、颜色) */
         .rule-modal-text {
             font-size: 12px; /* 文字大小，可调整 */
-            color: #333; /* 文字颜色，可调整 */
+            color: #696969; /* 文字颜色，可调整 */
             line-height: 1.5; /* 行高，提升阅读体验 */
             font-weight: 400; /* 文字粗细，400=常规，700=粗体 */
             margin-bottom: 5px; /* 每条规则间距 */
@@ -374,17 +415,26 @@
         <div class="promo-card card-blue">
             <span class="card-tag">购买服务「年限」</span>
             <div class="card-title">满2年赠1年</div>
-            <div class="card-icon">⚡</div>
+             <!-- 替换为图片，路径自行修改 -->
+             <div class="card-icon">
+                <img src="images/CaLendar.png" alt="年限图标">
+            </div>
         </div>
         <div class="promo-card card-purple">
             <span class="card-tag">购买账号「数量」</span>
             <div class="card-title">满5个打8折</div>
-            <div class="card-icon">👜</div>
+            <!-- 替换为图片，路径自行修改 -->
+            <div class="card-icon">
+                <img src="images/discount.png" alt="数量图标">
+            </div>
         </div>
         <div class="promo-card card-cyan">
             <span class="card-tag">单次购买「总额」</span>
             <div class="card-title">满5000赠3礼</div>
-            <div class="card-icon">🎁</div>
+            <!-- 替换为图片，路径自行修改 -->
+            <div class="card-icon">
+                <img src="images/gift.png" alt="总额图标">
+            </div>
         </div>
     </section>
     <div class="rules-details">
@@ -522,12 +572,18 @@
     </section>
     <div class="floating-sidebar">
         <div class="float-btn btn-buy" onclick="window.location.href='https://admin.saas.360.cn/s'">
-            <div>🛒</div>
-            立刻购买
+            <span class="float-btn-icon">
+                <!-- 替换为你的立即购买图标图片路径 -->
+                <img src="images/ShoppingCart.png" alt="购买图标">
+            </span>
+            <span>立刻购买</span>
         </div>
         <div class="float-btn btn-consult" onclick="scrollToQr()">
-            <div>💬</div>
-            客服咨询
+            <span class="float-btn-icon">
+                <!-- 替换为你的客服咨询图标图片路径 -->
+                <img src="images/contact.png" alt="咨询图标">
+            </span>
+            <span>客服咨询</span>                
         </div>
     </div>
 
@@ -546,10 +602,10 @@
                     如，买2年增加1年，为3年服务，买3年增加1年为4年服务。</p>
                 <p class="rule-modal-text"><strong>2、数量-满5打8：</strong>活动日期内，购买360AI办公企业版账号数量>=5个，可享受8折低价。</p>
                 <p class="rule-modal-text"><strong>3、金额-满5赠3：</strong>单次购买总金额大于5000元（折前），可享受3重好礼（如下）。</p>
-                <p class="rule-modal-text">1️⃣积分好礼：根据下单金额折算5倍积分，可兑换各类礼品：下单即享3倍积分回馈！积分按实际支付金额折算，凭积分可前往积分商城挑选二次好礼。涵盖家电、数码、办公、生活等13+品类，随心换随心兑！</p>
-                <p class="rule-modal-text">2️⃣安全好礼：360专业安全管理运维服务1月付费版服务指导咨询：基于360领先数字安全大脑，依托全面SaaS架构，为企业提供终端安全、资产管理、软件管理、上网行为管理、数据防泄漏、勒索防护等服务。</p>
-                <p class="rule-modal-text">3️⃣AI好礼：360纳米AI企业版充值提效体验：提供国内外优选大模型，帮企业实现知识库内容采集、创建、管理，为用户开放各岗位办公预制智能体以及智能体自编排能力。可实现企业AI量化监测、安全管控等。</p>
-                <p class="rule-modal-text"><strong>4、活动政策叠加：</strong>上述1、2、3活动政策，满足条件时，可重复叠加</p>
+                <p class="rule-modal-text">1️⃣积分好礼：根据下单金额折算5倍积分，可兑换各类礼品。下单即享3倍积分回馈！积分按实际支付金额折算，凭积分可前往积分商城挑选二次好礼。涵盖家电、数码、办公、生活等13+品类，随心换随心兑！</p>
+                <p class="rule-modal-text">2️⃣安全好礼：360专业安全管理运维服务1月付费版服务指导咨询。基于360领先数字安全大脑，依托全面SaaS架构，为企业提供终端安全、资产管理、软件管理、上网行为管理、数据防泄漏、勒索防护等服务。</p>
+                <p class="rule-modal-text">3️⃣AI好礼：360纳米AI企业版充值提效体验。提供国内外优选大模型，帮企业实现知识库内容采集、创建、管理，为用户开放各岗位办公预制智能体以及智能体自编排能力。可实现企业AI量化监测、安全管控等。</p>
+                <p class="rule-modal-text"><strong>4、活动政策叠加：</strong>上述1、2、3活动政策，满足条件时，可重复叠加。</p>
                 <p class="rule-modal-text">*以上活动解释权归360所有</p>
             </div>
         </div>
@@ -562,9 +618,9 @@
         const danmakuConfig = {
             texts: [
                 "写PPT不会排版?", "PDF格式转换难?", "不会制作海报?", "文章缺少配图?",
-                "总结不会写?", "视频看完总结难?", "录音太长总结难?", "图片二次处理难?",
-                "音/视频会议总结麻烦?", "没有模板从零搞?", "文档格式收钱?", "不会剪辑视频?",
-                "文档太长难总结?", "数据分析头大?", "周报月报怎么编?", "创意枯竭怎么办?"
+                "汇报材料不会写?", "视频看完总结难?", "录音太长听完难?", "图片二次处理难?",
+                "音/视频会议总结麻烦?", "没有模板从零搞?", "文档转换要收钱?", "不会剪辑视频?",
+                "文档太长难总结?", "小红书/电商文案不会写?", "周报月报怎么编?", "没有图片视频素材?"
             ],
             minSize: 13,      // 最小字体
             maxSize: 16,      // 最大字体
