@@ -336,7 +336,7 @@
             display: block;
         }
 
-        /* --- 【修改】Windows风格规则弹窗 --- */
+        /* --- 第七部分：Windows风格规则弹窗 --- */
         /* 弹窗遮罩层 */
         .rule-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -389,6 +389,110 @@
             font-weight: 400; /* 文字粗细，400=常规，700=粗体 */
             margin-bottom: 5px; /* 每条规则间距 */
         }
+        /* 第八部分：页脚区域 Footer*/
+        .site-footer {
+            background-color: #6cacf0; /* 页脚背景色 */
+            color: #ffffff;           /* 页脚文字颜色 */
+            padding: 40px 0;
+            font-size: 12px;
+            width: 100%;
+            margin-top: 0;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 20px;
+            line-height: 2;
+        }
+        /* 第一行：链接 */
+        .footer-links {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .footer-links a {
+            color: #ffffff;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: #000000;
+            text-decoration: underline;
+        }
+        .footer-divider {
+            color: #ffffff;
+            margin: 0 5px;
+        }
+        /* 第二行：版权信息 */
+        .footer-copyright {
+            margin-bottom: 10px;
+        }
+        /* 第三行：ICP备案与公网安备 */
+        .footer-icp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .footer-icp a {
+            color: #ffffff;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        .footer-icp a:hover {
+            color: #fff;
+        }
+        .police-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+         /* 回到顶部按钮 */
+           .back-to-top {
+            position: fixed;
+            right: 30px;
+            bottom: -160px;
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex; /* 默认用 flex，JS控制显隐 */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+            opacity: 0;       /* 默认透明 */
+            visibility: hidden; /* 默认不可点击 */
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            background-color: #307fda;
+            transform: translateY(-5px);
+        }
+        .back-to-top img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+         /* 保持箭头原蓝色，若背景是深色，可加filter调整 */
+            filter: none; /* 因为你的图标本身是蓝色，不需要反转 */
+        }
+        /* 悬浮时的动效（按钮+图标） */
+        .back-to-top:hover {
+            background: #f5f5f5; /* 按钮背景变浅灰 */
+        }
+        .back-to-top:hover img {
+            transform: translateY(-2px); /* 图标轻微上移，增加动态感 */
+            filter: brightness(1); /* 蓝色稍微变暗，增强反馈 */
+        }
+
     </style>
 </head>
 <body>
@@ -447,7 +551,7 @@
             <span class="price-unit">元/年</span>
         </div>
         
-        <button class="buy-btn-large" onclick="window.location.href='https://admin.saas.360.cn/login'">立即购买</button>
+        <button class="buy-btn-large" onclick="window.location.href='https://admin.saas.360.cn/s'">立即购买</button>
         <div class="price-tip">*不限企业规模（1人起），皆可购买使用</div>
     </section>
     <section class="features-section">
@@ -471,7 +575,7 @@
                 </div>
                 <div class="feature-item pos-4">
                     <div class="feat-title c-cyan">模板大全</div>
-                    <div class="feat-desc">PPT/Word/Excel/优质行业、岗位级模板</div>
+                    <div class="feat-desc">PPT/Word/Excel优质行业、岗位级模板</div>
                 </div>
                 <div class="feature-item pos-5">
                     <div class="feat-title c-orange">办公工具</div>
@@ -527,12 +631,13 @@
             <span class="gift-header">积分兑换礼品</span>
             <span class="gift-sub">好礼额外加码</span>
         </div>
-     <p class="gift-desc">
+    <!-- 核心修改：保留原文字 + 新增“前往积分商城”跳转链接 -->
+    <p class="gift-desc">
         *下单即享积分倍增，兑换礼品，年底囤货多赚一笔！
         <a href="https://admin.saas.360.cn/login" target="_blank" style="color: #ffcc00; text-decoration: underline; margin-left: 8px; cursor: pointer;">
             前往积分商城
         </a>
-     </p>
+    </p>
         <div class="carousel-container">
             <div class="arrow-btn" onclick="scrollGifts(-1)">❮</div>
             <div class="gift-track-wrapper" id="giftTrack">
@@ -575,8 +680,38 @@
             <div class="arrow-btn" onclick="scrollGifts(1)">❯</div>
         </div>
     </section>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://saas.360.cn/" target="_blank">360企业安全云</a>
+                <span class="footer-divider">|</span>
+                <a href="https://ai.saas.360.cn/" target="_blank">360纳米AI企业版</a>
+                <span class="footer-divider">|</span>
+                <a href="https://pop.vip.360.cn/help/bangong/vipUserAgreement.html" target="_blank">用户协议</a>
+                <span class="footer-divider">|</span>
+                <a href="https://pop.vip.360.cn/help/bangong/vipPrivacyAgreement.html" target="_blank">隐私协议</a>
+                <span class="footer-divider">|</span>
+                <a href="https://saas.360.cn/support?src=sem_bannermfsy1" target="_blank">使用帮助</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2005-2025 360.CN All Rights Reserved 360互联网安全中心
+            </div>
+
+            <div class="footer-icp">
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">
+                    京ICP证080047号[京ICP备08010314号-6]
+                </a>
+                <a href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank" style="margin-left: 10px;">
+                    <img src="images/national emblem.png" alt="" class="police-icon">
+                    京公网安备
+                </a>
+            </div>
+        </div>
+    </footer>
+
     <div class="floating-sidebar">
-        <div class="float-btn btn-buy" onclick="window.location.href='https://admin.saas.360.cn/login'">
+        <div class="float-btn btn-buy" onclick="window.location.href='https://admin.saas.360.cn/s'">
             <span class="float-btn-icon">
                 <!-- 替换为你的立即购买图标图片路径 -->
                 <img src="images/ShoppingCart.png" alt="购买图标">
@@ -590,6 +725,10 @@
             </span>
             <span>客服咨询</span>                
         </div>
+        <div class="back-to-top" id="backToTopBtn" title="回到顶部">
+            <img src="images/top.png" alt="Top">
+        </div>
+    
     </div>
 
     <!-- 【新增】Windows风格规则弹窗 -->
@@ -689,6 +828,26 @@
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(initDanmaku, 500);
         });
+        
+        // 【新增】回到顶部逻辑
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+       // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+       // 点击回到顶部
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
 
         // ============================
         // 2. 【新增】Windows风格规则弹窗逻辑
@@ -728,10 +887,4 @@
         }
     </script>
 </body>
-
 </html>
-
-
-
-
-
